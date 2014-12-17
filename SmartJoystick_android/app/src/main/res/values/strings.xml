@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filename">data.sj</string>
+    <string name="title">Smart Joystick</string>
+    <string name="registerButton">Register</string>
+    <string name="textView">Username :</string>
+    <string name="app_name">SmartJoystick</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
