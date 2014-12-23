@@ -41,12 +41,6 @@ public class MainActivity extends Activity {
         lan = new LAN();
         sjcs = new SJContextServices(repo, lan);
 
-        /*
-        Intent intent = new Intent(this, activity.class);
-        startActivity(intent);
-        server_.intent(this).start();
-        */
-
         File file = new File(this.getFilesDir().toString(), this.getString(R.string.filename));
 
         if(file.exists()) {

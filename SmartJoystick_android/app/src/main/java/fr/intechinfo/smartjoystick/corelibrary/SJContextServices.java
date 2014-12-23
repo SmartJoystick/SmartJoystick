@@ -1,18 +1,20 @@
 package fr.intechinfo.smartjoystick.corelibrary;
 
+import java.io.Serializable;
+
 /**
  * Created by Spraden on 08/11/2014.
  */
-public class SJContextServices {
+public class SJContextServices implements Serializable {
 
-    public LocalAreaNetwork _lan;
-    public Repository _repo;
+    public LocalAreaNetwork lan;
+    public Repository repo;
 
     public SJContextServices(Repository repo, LocalAreaNetwork lan)
     {
         if (repo == null || lan == null) throw new IllegalArgumentException("repo");
-        _repo = repo;
-        _lan = lan;
+        this.repo = repo;
+        this.lan = lan;
     }
 
 }

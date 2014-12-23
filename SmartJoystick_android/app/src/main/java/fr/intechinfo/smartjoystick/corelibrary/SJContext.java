@@ -24,7 +24,7 @@ public class SJContext implements Serializable {
     public Map<String, List<String>> gameInfo;
     public List<Game> gameList;
 
-    public transient SJContextServices services;
+    public SJContextServices services;
 
     public SJContext()
     {
@@ -41,7 +41,7 @@ public class SJContext implements Serializable {
     }
 
     public static SJContext Load( SJContextServices services, Context c ) throws IOException, ClassNotFoundException {
-        SJContext sjc = services._repo.LoadUnitializedContext(c);
+        SJContext sjc = services.repo.LoadUnitializedContext(c);
         sjc.Initialize( services );
         return sjc;
     }
@@ -51,13 +51,13 @@ public class SJContext implements Serializable {
         this.services = services;
     }
     public void Save(Context c) throws IOException {
-        services._repo.Save(c, this);
+        services.repo.Save(c, this);
     }
     public void InitializeLAN(String address, int port, Handler myHandler) throws IOException {
-        services._lan.InitializeLAN(address, port, myHandler);
+        services.lan.InitializeLAN(address, port, myHandler);
     }
     public void Send(String msg) throws IOException {
-        services._lan.Send(msg);
+        services.lan.Send(msg);
     }
     public Game CreateGame(String title, String description){
         return new Game(title,description);

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import fr.intechinfo.smartjoystick.R;
 import fr.intechinfo.smartjoystick.corelibrary.Repository;
@@ -16,7 +17,7 @@ import fr.intechinfo.smartjoystick.corelibrary.SJContext;
 /**
  * Created by Spraden on 17/11/2014.
  */
-public class BinaryFileRepository implements Repository {
+public class BinaryFileRepository implements Repository,Serializable {
 
     @Override
     public void Save(Context c, SJContext sjc) throws IOException {

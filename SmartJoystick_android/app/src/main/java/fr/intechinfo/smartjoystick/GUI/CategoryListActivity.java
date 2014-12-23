@@ -17,6 +17,8 @@ import net.sourceforge.zbar.Symbol;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 
+import java.io.IOException;
+
 import fr.intechinfo.smartjoystick.R;
 import fr.intechinfo.smartjoystick.corelibrary.SJContext;
 

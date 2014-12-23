@@ -1,15 +1,12 @@
 package fr.intechinfo.smartjoystick.GUI;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Toast;
 
 import com.dm.zbar.android.scanner.ZBarConstants;
@@ -20,18 +17,12 @@ import net.sourceforge.zbar.Symbol;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import fr.intechinfo.smartjoystick.corelibrary.Helper;
 import fr.intechinfo.smartjoystick.corelibrary.SJContext;
-import fr.intechinfo.smartjoystick.corelibrary.User;
 
 /**
  * Created by Spraden on 24/11/2014.
@@ -45,7 +36,7 @@ public class ScannerActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(this, "Welcome "+sjc.currentUser.username, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Welcome " + sjc.currentUser.username, Toast.LENGTH_SHORT).show();
         launchQRScanner();
     }
 
@@ -88,31 +79,16 @@ public class ScannerActivity extends Activity {
                         "  }\n" +
                         "}";
 
-                Map<String, String> list = JSONParser(st, 1);
-                //Map<String, String> list = JSONParser(data.getStringExtra(ZBarConstants.SCAN_RESULT), 0);
-                //Toast.makeText(this, "address : "+list.get("address")+" port : "+list.get("port"), Toast.LENGTH_SHORT).show();
-
-
-                /*
-                Toast.makeText(this, list.get(0)+list.get(1), Toast.LENGTH_SHORT).show();
-                list.add(user.username);
-                server_.intent(this).data(list).start();*/
-
-                Handler myHandler = new Handler() {
-                    @Override
-                    public void handleMessage (Message msg) {
-                        try {
-                            JSONParser((String) msg.obj, 1);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-               // sjc.InitializeLAN(list.get("address"),Integer.parseInt(list.get("port")), myHandler);
+                //Map<String, String> list = Helper.JSONParser(st, 1, sjc);
+                Map<String, String> list = Helper.JSONParser(data.getStringExtra(ZBarConstants.SCAN_RESULT), 0, sjc);
+                sjc.InitializeLAN(list.get("address"), Integer.parseInt(list.get("port")), handler);
+                Helper.JSONParser(st,1,sjc);
                 CategoryListActivity_.intent(this).sjc(sjc).start();
 
             } catch (JSONException e) {
                 Toast.makeText(this, "Can't connect, please try again !", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (resultCode == RESULT_CANCELED && data != null) {
@@ -122,49 +98,16 @@ public class ScannerActivity extends Activity {
             }
         }
     }
-    public Map JSONParser(String st, int mode) throws JSONException {
-        Map<String,String> list = new HashMap<String, String>();
 
-        JSONObject reader = null;
-        try {
-            reader = new JSONObject(st);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Iterator<String> iter = reader.keys();
-        while (iter.hasNext()) {
-            String key = iter.next();
-            Object value = reader.get(key);
-            if ( mode == 1) {
-                JSONObject obj = (JSONObject) value;
-                Iterator<String> iter2 = obj.keys();
-
-                List<String> list2 = new ArrayList<String>();
-                sjc.categories.add(key);
-
-                while (iter2.hasNext()) {
-                    String game = iter2.next();
-                    JSONObject value2 = (JSONObject) obj.get(game);
-                    Iterator<String> iter3 = value2.keys();
-
-                    list2.add(game);
-                    sjc.categoryList.put(key,list2);
-                    List<String> list3 = new ArrayList<String>();
-
-                    while (iter3.hasNext()) {
-                        String content = iter3.next();
-                        Object value3 = value2.get(content);
-
-                        list3.add(value3.toString());
-                        sjc.gameInfo.put(game,list3);
-                    }
-                    sjc.gameList.add(sjc.CreateGame(sjc.gameInfo.get(game).get(0),sjc.gameInfo.get(game).get(1)));
-                }
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            /*
+            try {
+                Helper.JSONParser(msg.getData().getString("message"), 1, sjc);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            else {
-                list.put(key,value.toString());
-            }
+            */
         }
-        return list;
-    }
+    };
 }

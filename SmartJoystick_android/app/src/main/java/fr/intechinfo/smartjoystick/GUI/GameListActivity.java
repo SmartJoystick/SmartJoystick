@@ -36,11 +36,6 @@ public class GameListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageAdapter.Item item = (ImageAdapter.Item) gridView.getAdapter().getItem(position);
                 sjc.currentGame = sjc.getCurrentGame(item.name);
-                try {
-                    sjc.Send("davo pu");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 GameActivity_.intent(GameListActivity.this).sjc(sjc).start();
             }
         });

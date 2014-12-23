@@ -20,7 +20,6 @@ import fr.intechinfo.smartjoystick.corelibrary.SJContext;
 public class ImageAdapter extends BaseAdapter {
     private List<Item> items = new ArrayList<Item>();
     private LayoutInflater inflater;
-    private String[] f;
 
     public ImageAdapter(Context context, SJContext sjc, String list) {
         inflater = LayoutInflater.from(context);
