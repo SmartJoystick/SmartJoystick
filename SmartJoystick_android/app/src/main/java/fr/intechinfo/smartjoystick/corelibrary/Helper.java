@@ -5,15 +5,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Spraden on 24/11/2014.
  */
 public class Helper {
 
+    //TO REDO, not optimal
     public static Map JSONParser(String st, int mode, SJContext sjc) throws JSONException {
         Map<String,String> list = new HashMap<String, String>();
 
@@ -27,7 +30,7 @@ public class Helper {
         while (iter.hasNext()) {
             String key = iter.next();
             Object value = reader.get(key);
-            if ( mode == 1) {
+            if (mode == 1) {
                 JSONObject obj = (JSONObject) value;
                 Iterator<String> iter2 = obj.keys();
 
@@ -50,7 +53,7 @@ public class Helper {
                         list3.add(value3.toString());
                         sjc.gameInfo.put(game,list3);
                     }
-                    sjc.gameList.add(sjc.CreateGame(sjc.gameInfo.get(game).get(0),sjc.gameInfo.get(game).get(1)));
+                    sjc.gameList.add(sjc.CreateGame(sjc.gameInfo.get(game).get(1),sjc.gameInfo.get(game).get(0)));
                 }
             }
             else {
@@ -58,5 +61,14 @@ public class Helper {
             }
         }
         return list;
+    }
+    public static <T, E> Set<T> getKeysByValue(Map<T, E> map, E value) {
+        Set<T> keys = new HashSet<T>();
+        for (Map.Entry<T, E> entry : map.entrySet()) {
+            if (value.equals(entry.getValue())) {
+                keys.add(entry.getKey());
+            }
+        }
+        return keys;
     }
 }

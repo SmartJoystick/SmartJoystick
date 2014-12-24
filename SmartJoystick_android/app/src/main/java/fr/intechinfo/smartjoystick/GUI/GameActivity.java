@@ -28,13 +28,12 @@ public class GameActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
 
+        //launch the game with a webview
         WebView webView = new WebView(this);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setDomStorageEnabled(true);
-        webView.addJavascriptInterface(new JavaScriptHandler(this, sjc),
-                "MyHandler");
         setContentView(webView);
         webView.loadUrl("https://www.google.fr/?gws_rd=ssl/9863#q="+sjc.currentGame.title);
         //sjc.currentGame.title

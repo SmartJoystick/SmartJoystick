@@ -10,8 +10,14 @@ import java.util.UUID;
 public class Game implements Serializable {
     public String title;
     public String description;
-   // public URI url;
     public String id;
+
+    //for test only
+    public int minPlayer = 2;
+    public int maxPlayer = 5;
+
+   // public URI url;
+
 
     public Game(String title, String description){
         this.id = UUID.randomUUID().toString();

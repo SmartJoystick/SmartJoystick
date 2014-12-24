@@ -1,12 +1,14 @@
 package fr.intechinfo.smartjoystick.GUI;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +23,17 @@ public class ImageAdapter extends BaseAdapter {
     private List<Item> items = new ArrayList<Item>();
     private LayoutInflater inflater;
 
-    public ImageAdapter(Context context, SJContext sjc, String list) {
+    public ImageAdapter(Context context, SJContext sjc) {
         inflater = LayoutInflater.from(context);
 
-        if (list == "") {
+        //create the categories icon
+        if (sjc.currentCategory == null) {
             for (int i = 0; i < sjc.categories.size(); i++) {
                 items.add(new Item(sjc.categories.get(i), R.drawable.btn));
             }
         } else {
-            List<String> game = sjc.categoryList.get(list);
+            //create the games icon
+            List<String> game = sjc.categoryList.get(sjc.currentCategory);
             for (int i = 0; i < game.size(); i++) {
                 items.add(new Item(game.get(i), R.drawable.btn));
             }

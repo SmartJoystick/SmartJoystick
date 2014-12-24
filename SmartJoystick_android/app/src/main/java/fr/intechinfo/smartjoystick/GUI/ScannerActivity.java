@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,11 +16,11 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.util.Map;
 
 import fr.intechinfo.smartjoystick.corelibrary.Helper;
 import fr.intechinfo.smartjoystick.corelibrary.SJContext;
+import fr.intechinfo.smartjoystick.localareanetwork.LAN;
 
 /**
  * Created by Spraden on 24/11/2014.
@@ -35,7 +33,6 @@ public class ScannerActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Toast.makeText(this, "Welcome " + sjc.currentUser.username, Toast.LENGTH_SHORT).show();
         launchQRScanner();
     }
@@ -58,39 +55,21 @@ public class ScannerActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+
+            //get data from the qr code which was scanned
+            Map<String, String> list = null;
             try {
-
-                String st = "{\n" +
-                        "  \"action\": {\n" +
-                        "    \"game1\": {\n" +
-                        "      \"title\": \"game1\",\n" +
-                        "      \"description\": \"description game 1\"\n" +
-                        "    },\n" +
-                        "    \"game3\": {\n" +
-                        "      \"title\": \"game3\",\n" +
-                        "      \"description\": \"description game 3\"\n" +
-                        "    }\n" +
-                        "  },\n" +
-                        "  \"cards\": {\n" +
-                        "    \"game2\": {\n" +
-                        "      \"title\": \"game2\",\n" +
-                        "      \"description\": \"description game 2\"\n" +
-                        "    }\n" +
-                        "  }\n" +
-                        "}";
-
-                //Map<String, String> list = Helper.JSONParser(st, 1, sjc);
-                Map<String, String> list = Helper.JSONParser(data.getStringExtra(ZBarConstants.SCAN_RESULT), 0, sjc);
-                sjc.InitializeLAN(list.get("address"), Integer.parseInt(list.get("port")), handler);
-                Helper.JSONParser(st,1,sjc);
-                CategoryListActivity_.intent(this).sjc(sjc).start();
-
+                list = Helper.JSONParser(data.getStringExtra(ZBarConstants.SCAN_RESULT), 0, sjc);
             } catch (JSONException e) {
-                Toast.makeText(this, "Can't connect, please try again !", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            //set the address and the port for the socket connection
+            LAN.getInstance().address = list.get("address");
+            LAN.getInstance().port = Integer.parseInt(list.get("port"));
+
+            CategoryListActivity_.intent(this).sjc(sjc).start();
+
         } else if (resultCode == RESULT_CANCELED && data != null) {
             String error = data.getStringExtra(ZBarConstants.ERROR_INFO);
             if (!TextUtils.isEmpty(error)) {
@@ -98,16 +77,4 @@ public class ScannerActivity extends Activity {
             }
         }
     }
-
-    private Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            /*
-            try {
-                Helper.JSONParser(msg.getData().getString("message"), 1, sjc);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            */
-        }
-    };
 }

@@ -18,6 +18,7 @@ public class SJContext implements Serializable {
     public User currentUser;
     public Game currentGame;
     public String currentCategory;
+    public Map<String, String> gamePlayers;
 
     public List<String> categories;
     public Map<String, List<String>> categoryList;
@@ -28,6 +29,7 @@ public class SJContext implements Serializable {
 
     public SJContext()
     {
+        gamePlayers = new HashMap<String, String>();
         gameList = new ArrayList<Game>();
         categories = new ArrayList<String>();
         categoryList = new HashMap<String, List<String>>();
@@ -53,15 +55,11 @@ public class SJContext implements Serializable {
     public void Save(Context c) throws IOException {
         services.repo.Save(c, this);
     }
-    public void InitializeLAN(String address, int port, Handler myHandler) throws IOException {
-        services.lan.InitializeLAN(address, port, myHandler);
-    }
-    public void Send(String msg) throws IOException {
-        services.lan.Send(msg);
-    }
+
     public Game CreateGame(String title, String description){
         return new Game(title,description);
     }
+
     public Game getCurrentGame(String name){
         Game tmp = null;
         for (int i = 0; i<gameList.size();i++){

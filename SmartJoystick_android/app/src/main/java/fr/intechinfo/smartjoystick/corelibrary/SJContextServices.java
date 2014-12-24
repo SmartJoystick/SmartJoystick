@@ -7,14 +7,12 @@ import java.io.Serializable;
  */
 public class SJContextServices implements Serializable {
 
-    public LocalAreaNetwork lan;
     public Repository repo;
 
-    public SJContextServices(Repository repo, LocalAreaNetwork lan)
+    public SJContextServices(Repository repo)
     {
-        if (repo == null || lan == null) throw new IllegalArgumentException("repo");
+        if (repo == null) throw new IllegalArgumentException("repo");
         this.repo = repo;
-        this.lan = lan;
     }
 
 }

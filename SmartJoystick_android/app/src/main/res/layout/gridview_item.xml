@@ -20,5 +20,6 @@
         android:layout_gravity="bottom"
         android:textColor="#0174DF"
         android:background="@drawable/btn_grey"
-        android:gravity="center|center_horizontal" />
+        android:gravity="center|center_horizontal"
+        android:clickable="true" />
 </FrameLayout>

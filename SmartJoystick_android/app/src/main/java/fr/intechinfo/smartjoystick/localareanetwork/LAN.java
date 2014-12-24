@@ -1,34 +1,47 @@
 package fr.intechinfo.smartjoystick.localareanetwork;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import fr.intechinfo.smartjoystick.corelibrary.LocalAreaNetwork;
-
 /**
- * Created by Spraden on 18/11/2014.
+ * Created by StephaneTruong on 24/12/2014.
  */
-public class LAN implements LocalAreaNetwork, Serializable {
+public class LAN {
+    private static LAN mInstance = null;
 
-    private transient Socket socket = null;
-    private transient PrintWriter out = null;
-    private transient BufferedReader in = null;
+    private Socket socket = null;
+    private PrintWriter out = null;
+    private BufferedReader in = null;
 
-    private String address;
-    private int port;
+    public String address;
+    public int port;
+    public Handler handler;
+
+    private LAN() {
+
+    }
+
+    //it's a singleton class
+    public static LAN getInstance() {
+        if (mInstance == null) {
+            mInstance = new LAN();
+        }
+        return mInstance;
+    }
 
     public void Send(final String msg) throws IOException {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //create a new socket if not already created
                 if (socket == null) {
                     try {
                         socket = new Socket(address, port);
@@ -41,21 +54,19 @@ public class LAN implements LocalAreaNetwork, Serializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //send data to the the server
                 out.println(msg);
                 out.flush();
             }
         }).start();
     }
 
-    @Override
-    public void InitializeLAN(final String address, final int port, final android.os.Handler handler) throws IOException {
-
-        this.address = address;
-        this.port = port;
+    public void SetReceiver() throws IOException {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //create a new socket if not already created
                 if (socket == null) {
                     try {
                         socket = new Socket(address, port);
@@ -65,8 +76,8 @@ public class LAN implements LocalAreaNetwork, Serializable {
                         e.printStackTrace();
                     }
                 }
-
                 try {
+                    //receive data sent by the server
                     in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -74,6 +85,7 @@ public class LAN implements LocalAreaNetwork, Serializable {
                 while (true) {
                     String msg = null;
                     try {
+                        //convert bufferedreader to string
                         msg = in.readLine();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -81,8 +93,8 @@ public class LAN implements LocalAreaNetwork, Serializable {
                     if (msg == null) {
                         break;
                     } else {
+                        //set received data to the handler msg
                         System.out.println(msg);
-
                         Message msgObj = handler.obtainMessage();
                         Bundle b = new Bundle();
                         b.putString("message", msg);
@@ -92,5 +104,11 @@ public class LAN implements LocalAreaNetwork, Serializable {
                 }
             }
         }).start();
+    }
+
+    public void Close() throws IOException {
+        in.close();
+        out.close();
+        socket.close();
     }
 }
