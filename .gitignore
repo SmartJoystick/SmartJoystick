@@ -39,3 +39,8 @@ Optional - for older project format, add this section to your gitignore file:
 *.ipr
 *~
 *.swp
+
+/SmartJoystick_server/*
+!/SmartJoystick_server/sources
+!/SmartJoystick_server/games
+!/SmartJoystick_server/package.json

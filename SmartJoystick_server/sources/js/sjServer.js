@@ -1,0 +1,7 @@
+var sjServer = (function(){
+
+    return {
+
+    }
+
+})();
