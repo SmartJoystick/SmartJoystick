@@ -37,6 +37,7 @@ var server = net.createServer(function(socket) {
         sjCore.removeClient(socketCache);
         clients.splice(clients.indexOf(socketCache), 1);
         sjCore.events.fire('end', socketCache);
+
     });
 });
 
@@ -48,7 +49,7 @@ sjGames.getGames(function(err, result){
     if (err){ return;}
     gamesList = JSON.stringify(result);
     server.listen(port, address, function(){
-        $('#qrcode').qrcode({text : qrContent, size : 150});
+        $('#qrcode').qrcode({text : qrContent, size : 300});
     }); 
         
 });

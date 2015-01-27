@@ -50,13 +50,19 @@ var sjGames = (function(){
 
             // see the output of the server in the console ( spawn --> streams and exec --> buffer)
             child.stdout.on('data', function(chunk) {
-              console.log(chunk.toString());
+                console.log(chunk.toString());
+            });
+            
+            child.stderr.on('data', function(chunk) {
+                console.log(chunk.toString());
             });
 
             console.log('availablePort',availablePort);
-            var indexPath = path.join('http://', address+':5001', game.category, game.title, 'index.html?port='+availablePort);
+            var indexPath = path.join('http://', address+':5001', 'games', game.category, game.title, 'index.html?port='+availablePort);
             sjCore.send(playerId, indexPath);
             runningPort[gameName] = availablePort;
+
+            console.log(indexPath);
 
             availablePort++;
 
@@ -67,22 +73,15 @@ var sjGames = (function(){
             console.log('game server already running');
             console.log('availablePort',runningPort[gameName]);
 
-            var indexPath = path.join('http://', address+':5001', game.category, game.title, 'index.html?port='+runningPort[gameName]);
+            var indexPath = path.join('http://', address+':5001', 'games', game.category, game.title, 'index.html?port='+runningPort[gameName]);
             sjCore.send(playerId, indexPath);
        }
 
     };
 
-    var removePlayer = function(playerId, gameName){
-        activePlayers.splice(activePlayers.indexOf(playerId), 1);
-
-        // if activePlayers for the game is 0 kill the server
-    }
-
     return {
         getGames  : getGames,
-        registerPlayer : registerPlayer,
-        removePlayer : removePlayer
+        registerPlayer : registerPlayer
     }
 
 })();

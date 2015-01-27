@@ -2,9 +2,9 @@
   "name": "smartJoystick",
   "main": "index.html",
   "window": {
-    "width": 800,
-    "height": 850,
-    "toolbar": true,
+    "width": 500,
+    "height": 500,
+    "toolbar": false,
     "frame": true
   },
   "dependencies": {

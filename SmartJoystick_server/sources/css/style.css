@@ -1,0 +1,23 @@
+body{
+    background-color: #F7F7F7;
+}
+
+#logo{
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 20px;
+}
+
+#qrcode{
+    width: 300px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#nbClient{
+    text-align: center;
+    font-family: 'Roboto Condensed';
+    font-size: 1.4em;
+    color: #333;
+}
